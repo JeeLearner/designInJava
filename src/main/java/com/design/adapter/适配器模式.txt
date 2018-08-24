@@ -3,9 +3,10 @@
     对象适配器模式：采用组合的方式。
 
 组成：
-    adaptee 被适配者
-    adapter 适配器
-    target 适配器接口
+    adaptee 源角色   被适配者
+    target 目标角色 适配器接口
+    adapter 适配器角色  适配器
+
 
 
 应用场景：
