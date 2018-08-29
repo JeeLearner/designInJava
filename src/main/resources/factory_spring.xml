@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans>
+
+    <bean id="car" class="com.design.factory.demo2_1.entity.Car">
+    </bean>
+
+    <bean id="train" class="com.design.factory.demo2_1.entity.Train">
+    </bean>
+
+</beans>
