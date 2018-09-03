@@ -17,7 +17,7 @@ public class Client {
         bjBranch.add(marketJoin);
         bjBranch.add(marketJoin2);
         rootBranch.add(bjBranch);
-        marketJoin2.payByCard();
+        rootBranch.payByCard();
     }
 
 
