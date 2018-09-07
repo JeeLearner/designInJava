@@ -23,3 +23,6 @@
 /dist/
 /nbdist/
 /.nb-gradle/
+
+##临时
+/src/main/java/com/design/decorator/demo2_1/
