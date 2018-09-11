@@ -1,0 +1,123 @@
+一、观察者模式介绍
+    观察者模式（发布-订阅模式）：定义了一种一对多的依赖关系，让多个观察者对象同时监听某一个主题对象，这个主题对象在状态发生变化时，会通知所有观察者对象。使它们能够自动更新自己。
+　　观察者模式是对象的行为模式，又叫发布-订阅(Publish/Subscribe)模式、模型-视图(Model/View)模式、源-监听器(Source/Listener)模式或从属者(Dependents)模式。
+　　观察者模式定义了一种一对多的依赖关系，让多个观察者对象同时监听某一个主题对象。这个主题对象在状态上发生变化时，会通知所有观察者对象，使它们能够自动更新自己。
+例如：
+    1、游戏中的例子：游戏中，当进入新人的时候，大喇叭会通知所有的玩家。所有的游戏玩家是订阅者，而大喇叭就是一个发布者。
+    2、QQ群聊天中：在群里聊天的时候，你发一句话，大家都可以看到。那么，这个群里的人就是订阅者，而通过群发消息的服务器则作为了一个发布者。
+
+角色：
+    Subject（抽象主题）：抽象主题中把所有观察者对象的引用都保存在一个集合里，每个主题都可以有任何数量的观察者，这个主题提供一个接口。
+            来增加或者删除具体的观察者对象。
+    ConcreteSubject（具体主题）：具体主题中就操作了具体的观察者对象，将有关状态存入具体的观察者对象中，假如具体主题内部状态发生了改变。
+            则给所有注册过的观察者发出更新的通知。然后具体的观察者则更新自己的状态。
+    Observer（抽象观察者）：为所有观察者定义一个接口，在得到主题的通知时则更新自己。
+    ConcreteObserver（具体观察者）：实现抽象观察者定义的接口，自身的状态随着主题的更新而更新。
+
+推模型和拉模型
+　　在观察者模式中，又分为推模型和拉模型两种方式。
+　　●推模型
+　　　　 主题对象向观察者推送主题的详细信息，不管观察者是否需要，推送的信息通常是主题对象的全部或部分数据。
+　　●拉模型
+　　　　 主题对象在通知观察者的时候，只传递少量信息。如果观察者需要更具体的信息，由观察者主动到主题对象中获取，相当于是观察者从主题对象中拉数据。一般这种模型的实现中，会把主题对象自身通过update()方法传递给观察者，这样在观察者需要获取数据的时候，就可以通过这个引用来获取了。
+         拉模型通常都是把主题对象当做参数传递。　　
+    根据上面的描述，发现demo1_1和demo1_2的例子就是典型的推模型，demo1_3将给出一个拉模型的实例。
+　　两种模式的比较
+  　　■推模型是假定主题对象知道观察者需要的数据；而拉模型是主题对象不知道观察者具体需要什么数据，没有办法的情况下，干脆把自身传递给观察者，让观察者自己去按需要取值。
+  　　■推模型可能会使得观察者对象难以复用，因为观察者的update()方法是按需要定义的参数，可能无法兼顾没有考虑到的使用情况。这就意味着出现新情况的时候，就可能提供新的update()方法，或者是干脆重新实现观察者；而拉模型就不会造成这样的情况，因为拉模型下，update()方法的参数是主题对象本身，这基本上是主题对象能传递的最大数据集合了，基本上可以适应各种情况的需要。
+
+开发中常见场景：
+    1.聊天室程序，服务器转发信息给所有客户端
+    2.网络游戏（多人联机对战）场景中，服务器将客户端的状态进行分发
+    3.邮件订阅
+    4.Servlet中，监听器的实现
+    5.Android的广播机制
+    6.JDK的AWT中事件处理模型
+
+demo1_1 游戏玩家
+    1）定义一个抽象观察者接口：相当于玩家角色，也可以使用抽象类。抽象观察者中只提供一个更新状态的方法，所有实现该抽象观察者的具体观察者，需要随着更新
+    2）具体的观察者：相当于具体的游戏玩家
+    3）定义主题对象，主题对象中存储了所有该主题下的所有观察者，并提供增加和删除观察者的方法
+    4）开始定义具体的主题对象
+demo1_2 使用jdk提供的两个接口来实现一个观察者模式demo
+    demo1_1中是自己定义的Observer和Subject。其实java中已经帮我们写好了这两个目标对象接口和观察者接口
+        java.util.Observable 这个类就相当于我们自己定义的subject类
+        java.util.Observer   接口
+demo1_3 拉模型
+    拉模型的抽象主题类主要的改变是nodifyObservers()方法。在循环通知观察者的时候，也就是循环调用观察者的update()方法的时候，传入的参数不同了。
+    拉模型的具体主题类跟推模型相比，有一点变化，就是调用通知观察者的方法的时候，不需要传入参数了。
+
+demo2_1 在Spring 中使用事件监听机制的Demo
+    1. 建立事件类MyEvent,继承applicationEvent
+    2.建立监听类MyListener,实现ApplicationListener接口
+    3.创建一个发布事件的类MyPubisher,该类实现ApplicationContextAware接口,得到ApplicationContext对象,使用该对象的publishEvent方法发布事件.
+    4.在spring配置文件中,注册事件类和监听类,当然使用注解的方式也是一样的.(略)
+
+demo2_2  利用Spring实现观察者模式（Oberver）
+
+
+
+扩展：
+1）spring事件驱动模型
+    ApplicationEvent继承自jdk的EventObject,所有的事件都需要继承ApplicationEvent,并且通过source得到事件源.该类的实现类ApplicationContextEvent表示ApplicaitonContext的容器事件.
+        public abstract class ApplicationEvent extends EventObject {
+            private static final long serialVersionUID = 7099057708183571937L;
+            private final long timestamp;
+            public ApplicationEvent(Object source) {
+                super(source);
+                this.timestamp = System.currentTimeMillis();
+            }
+            public final long getTimestamp() {
+                return this.timestamp;
+            }
+        }
+
+    ApplicationListener继承自jdk的EventListener,所有的监听器都要实现这个接口,这个接口只有一个onApplicationEvent()方法,该方法接受一个ApplicationEvent或其子类对象作为参数,在方法体中,可以通过不同对Event类的判断来进行相应的处理.当事件触发时所有的监听器都会收到消息,如果你需要对监听器的接收顺序有要求,可是实现该接口的一个实现SmartApplicationListener,通过这个接口可以指定监听器接收事件的顺序.
+        public interface ApplicationListener<E extends ApplicationEvent> extends EventListener {
+            void onApplicationEvent(E event);
+        }
+
+    事件机制的实现需要三个部分,事件源,事件,事件监听器,在上面介绍的ApplicationEvent就相当于事件,ApplicationListener相当于事件监听器,这里的事件源说的就是applicaitonContext.
+    ApplicationContext是spring中的全局容器,翻译过来是"应用上下文"的意思,它用来负责读取bean的配置文档,管理bean的加载,维护bean之间的依赖关系,可以说是负责bean的整个生命周期,再通俗一点就是我们平时所说的IOC容器.　
+    Application作为一个事件源,需要显示的调用publishEvent方法,传入一个ApplicationEvent的实现类对象作为参数,每当ApplicationContext发布ApplicationEvent时,所有的ApplicationListener就会被自动的触发.
+
+    ApplicationContext接口实现了ApplicationEventPublisher接口,后者有一个很重要的方法:
+        public interface ApplicationEventPublisher {
+            void publishEvent(ApplicationEvent event);
+        }
+
+    我们常用的ApplicationContext都继承了AbstractApplicationContext,像我们平时常见的ClassPathXmlApplicationContext、XmlWebApplicationContex也都是继承了它,AbstractApplicationcontext是ApplicationContext接口的抽象实现类,在该类中实现了publishEvent方法\
+            public void publishEvent(ApplicationEvent event) {
+                Assert.notNull(event, "Event must not be null");
+                if (logger.isTraceEnabled()) {
+                    logger.trace("Publishing event in " + getDisplayName() + ": " + event);
+                }
+                getApplicationEventMulticaster().multicastEvent(event);
+                if (this.parent != null) {
+                    this.parent.publishEvent(event);
+                }
+            }
+    在这个方法中,我们看到了一个getApplicationEventMulticaster().这就要牵扯到另一个类ApplicationEventMulticaster.
+
+    ApplicationEventMulticaster属于事件广播器,它的作用是把Applicationcontext发布的Event广播给所有的监听器.
+
+    在AbstractApplicationcontext中有一个applicationEventMulticaster的成员变量,提供了监听器Listener的注册方法.
+        public abstract class AbstractApplicationContext extends DefaultResourceLoader
+                implements ConfigurableApplicationContext, DisposableBean {
+
+        　　private ApplicationEventMulticaster applicationEventMulticaster;
+        　　protected void registerListeners() {
+                // Register statically specified listeners first.
+                for (ApplicationListener<?> listener : getApplicationListeners()) {
+                    getApplicationEventMulticaster().addApplicationListener(listener);
+                }
+                // Do not initialize FactoryBeans here: We need to leave all regular beans
+                // uninitialized to let post-processors apply to them!
+                String[] listenerBeanNames = getBeanNamesForType(ApplicationListener.class, true, false);
+                for (String lisName : listenerBeanNames) {
+                    getApplicationEventMulticaster().addApplicationListenerBean(lisName);
+                }
+            }
+        }
+
+优秀文章：https://www.cnblogs.com/esther-qing/p/9019311.html
